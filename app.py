@@ -1,9 +1,8 @@
 import sys
 import sqlite3
 from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, 
-                             QLabel, QLineEdit, QPushButton, QFileDialog)
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QHBoxLayout, QFormLayout, QGroupBox
+                             QLabel, QLineEdit, QPushButton, QFileDialog, 
+                             QFormLayout, QGroupBox)
 
 class ProductForm(QWidget):
     def __init__(self):
@@ -59,9 +58,13 @@ class ProductForm(QWidget):
         self.conn.commit()
 
     def load_image(self):
-        options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getOpenFileName(self, "Seleccionar Imagen", "", 
-                                                     "Images (*.png *.xpm *.jpg)", options=options)
+        # Usar QFileDialog sin crear una instancia de Option
+        file_name, _ = QFileDialog.getOpenFileName(
+            self, 
+            "Seleccionar Imagen", 
+            "", 
+            "Images (*.png *.xpm *.jpg);;All Files (*)"
+        )
         if file_name:
             self.image_path.setText(file_name)
 
@@ -76,6 +79,7 @@ class ProductForm(QWidget):
             ''', (name, float(price), image_path))
             self.conn.commit()
 
+            # Limpiar los campos después de guardar
             self.product_name.clear()
             self.product_price.clear()
             self.image_path.clear()
