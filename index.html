@@ -3,38 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda Online</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-        }
-        h1 {
-            color: #333;
-        }
-        .product {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 10px;
-            background-color: #fff;
-        }
-        .product img {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
+    <title>Productos</title>
 </head>
 <body>
-    <h1>Tienda Online</h1>
-    {% for product in products %}
-        <div class="product">
-            <h2>{{ product[1] }}</h2>
-            <p>Precio: ${{ product[2] }}</p>
-            <img src="{{ product[3] }}" alt="{{ product[1] }}">
-        </div>
-    {% endfor %}
+    <h1>Lista de Productos</h1>
+    <div id="productos"></div>
+
+    <script>
+        fetch('http://localhost:5000/productos')  // Cambia a la URL de tu API si es necesario
+            .then(response => response.json())
+            .then(data => {
+                const productosDiv = document.getElementById('productos');
+                data.forEach(producto => {
+                    const productoDiv = document.createElement('div');
+                    productoDiv.innerHTML = `
+                        <h2>${producto.nombre}</h2>
+                        <p>Precio: ${producto.precio}</p>
+                        <img src="${producto.foto}" alt="${producto.nombre}" width="100">
+                    `;
+                    productosDiv.appendChild(productoDiv);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
 </body>
 </html>
