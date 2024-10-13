@@ -4,27 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .producto {
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            display: inline-block;
+        }
+        .producto img {
+            max-width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Lista de Productos</h1>
-    <div id="productos"></div>
+    <h1>Productos</h1>
+    <div id="productos-container"></div>
 
     <script>
-        fetch('http://localhost:5000/productos')  // Cambia a la URL de tu API si es necesario
+        fetch('productos.json')  // Carga el archivo JSON
             .then(response => response.json())
             .then(data => {
-                const productosDiv = document.getElementById('productos');
+                const container = document.getElementById('productos-container');
                 data.forEach(producto => {
-                    const productoDiv = document.createElement('div');
-                    productoDiv.innerHTML = `
+                    const div = document.createElement('div');
+                    div.className = 'producto';
+                    div.innerHTML = `
                         <h2>${producto.nombre}</h2>
-                        <p>Precio: ${producto.precio}</p>
-                        <img src="${producto.foto}" alt="${producto.nombre}" width="100">
+                        <img src="${producto.foto}" alt="${producto.nombre}">
+                        <p>Precio: $${producto.precio}</p>
                     `;
-                    productosDiv.appendChild(productoDiv);
+                    container.appendChild(div);
                 });
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error al cargar los productos:', error));
     </script>
 </body>
 </html>
